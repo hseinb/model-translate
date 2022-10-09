@@ -4,26 +4,28 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
 from keras.preprocessing.text import Tokenizer
 from tensorflow.keras.models import load_model
+#from keras.preprocessing.sequence import pad_sequences
 import pickle
 import logging
+import numpy as np
 
 class FRENGTranslator:
 
-    def __init__(self, model_path, en, fr):
+    def __init__(self, model_path):
         logging.info("FRENGTranslator class initialized")
         self.model = load_model(model_path)
         logging.info("Model is loaded!")
-        engfile = open('tokenizer_eng.pickle', 'rb')
         eng_tokenizer = Tokenizer()
-        eng_tokenizer.open(engfile)
-        frfile = open('tokenizer_fr.pickle', 'rb')
         fr_tokenizer = Tokenizer()
-        fr_tokenizer.open(frfile)
+        
 
 
-    def predict(self, sentence):
+    def predict(self, sentence, en, fr):
         # load the image
-        sentprep = self.prepare(sentence)
+        
+        with open(fr, 'rb') as handle:
+            fr_tokenizer = pickle.load(handle)
+        sentprep = self.prepare(sentence,en)
 
         # predict the class
         result = self.model.predict(sentprep)
@@ -34,17 +36,20 @@ class FRENGTranslator:
         # return french statement
         return final
 
-    def prepare(self, sent):
+    def prepare(self, sent, en):
         # Prepare eng sentance to pass through model
-        sentence = eng_tokenizer.texts_to_sequences([sentence])
-        sentence = pad_sequences(sentence, maxlen=max_eng, padding='post')
+        with open(en, 'rb') as handle:
+            eng_tokenizer = pickle.load(handle)
+
+        sentence = eng_tokenizer.texts_to_sequences([sent])
+        sentence = tf.keras.preprocessing.sequence.pad_sequences(sentence, maxlen=15, padding='post')
         logging.info("Preparing the following statement {}".format(sent))
         return sentence
 
 
 def main():
 	model = FRENGTranslator('Bidir_model.h5')
-	predicted = model.predict("she is driving the truck")
+	predicted = model.predict("she is driving the truck",'tokenizer_eng.pickle','tokenizer_fr.pickle')
 	logging.info("This translates to {}".format(predicted)) 
 
 
