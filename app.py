@@ -3,12 +3,12 @@ import logging
 
 from flask import Flask, request, jsonify
 
-from model.model import FRENGTranslator
+from model import FRENGTranslator
 
 app = Flask(__name__)  
 
 # define model path
-model_path = './model/Bidir_model.h5'
+model_path = './Bidir_model.h5'
 
 # create instance
 model = FRENGTranslator(model_path)
@@ -26,7 +26,7 @@ def predict():
     """Provide main prediction API route. Responds to both GET and POST requests."""
     logging.info("Predict request received!")
     image_url = request.args.get("sentence")
-    prediction = model.predict(image_url)
+    prediction = model.predict(image_url,'tokenizer_eng.pickle','tokenizer_fr.pickle')
     
     logging.info("prediction from model= {}".format(prediction))
     return jsonify({"predicted_class": str(prediction)})
