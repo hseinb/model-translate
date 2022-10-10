@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - youtube.com/codingnepal -->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">  
+    <title>Language Translator</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome CDN Link for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+  </head>
+  <body>
+    <div class="container">
+      <div class="title">
+      <h1 style="color:DodgerBlue;">Translator</h1>
+
+      <h2 style="color:rgb(30, 38, 255);">
+          From English to French
+      </h2>
+
+    </div>
+      <div class="wrapper">
+            
+        <form action="{{ url_for('predict')}}"method="POST">
+        
+
+        <div class="text-input">
+          <textarea style="color:grey;" spellcheck="false" class="from-text" placeholder="Enter text" required></textarea>
+          <textarea spellcheck="false" readonly disabled class="to-text" placeholder="Translation" required>{{Translation}}</textarea>
+        </div>
+        <ul class="controls">
+          <li class="row from">
+            <div class="icons">
+
+
+            </div>
+
+              <option style="color:DodgerBlue;"> English</option>
+
+          </li>
+          <li class="row to">
+            
+              <option style="color: rgb(30, 38, 255);"> French</option>
+
+ 
+            <div class="icons">
+
+            </div>
+          </li>
+        </ul>
+      </div>
+      <button >Translate Text</button>
+    </div>
+  </form>
+
+    <script src="js/countries.js"></script>
+    <script src="js/script.js"></script>
+
+  </body>
+</html>
