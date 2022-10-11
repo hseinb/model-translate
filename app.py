@@ -1,11 +1,11 @@
 import os
 import logging
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 from model import FRENGTranslator
 
-app = Flask(__name__)  
+app = Flask(__name__, template_folder='templates')  
 
 # define model path
 model_path = './Bidir_model.h5'
@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 def index():
     """Provide simple health check route."""
 
-    return "<p>"
+    return render_template('test.html')
 
 
 @app.route("/v1/predict", methods=["GET", "POST"])

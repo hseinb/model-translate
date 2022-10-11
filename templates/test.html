@@ -8,7 +8,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Font Awesome CDN Link for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   </head>
+  <script>
+    function myFunction() {
+      var sentence= $('#sentence').val();
+      $.ajax({
+                  url: "/v1/predict",
+                  type: "GET",
+                  data: {sentence:sentence
+                  }
+              }).done(function(response) {
+                var html= "<br><br><br><p> <b> RESULT : <b><p>";
+                response =response.result;
+                     $.each(response,function(key,val){
+                     console.log(val);
+                        html+="<p>"+val+"<p>"
+                    });
+                    html +="<br>";
+                    $(".show-data").append(html);
+                });
+    };
+      </script>
   <body>
     <div class="container">
       <div class="title">
@@ -21,40 +42,19 @@
     </div>
       <div class="wrapper">
             
-        <form action="{{ url_for('predict')}}"method="POST">
+        <form action="/v1/predict"method="GET">
         
 
         <div class="text-input">
-          <textarea style="color:grey;" spellcheck="false" class="from-text" placeholder="Enter text" required></textarea>
-          <textarea spellcheck="false" readonly disabled class="to-text" placeholder="Translation" required>{{Translation}}</textarea>
+          <textarea name="sentence" style="color:grey;" id="sentence" spellcheck="false" class="from-text" placeholder="Enter text" required></textarea>
         </div>
-        <ul class="controls">
-          <li class="row from">
-            <div class="icons">
-
-
-            </div>
-
-              <option style="color:DodgerBlue;"> English</option>
-
-          </li>
-          <li class="row to">
-            
-              <option style="color: rgb(30, 38, 255);"> French</option>
-
- 
-            <div class="icons">
-
-            </div>
-          </li>
-        </ul>
+        
       </div>
-      <button >Translate Text</button>
+      <button onclick="myFunction()">Translate Text</button>
     </div>
   </form>
-
-    <script src="js/countries.js"></script>
-    <script src="js/script.js"></script>
+  <div class="show-data" >
+  </div>
 
   </body>
 </html>
